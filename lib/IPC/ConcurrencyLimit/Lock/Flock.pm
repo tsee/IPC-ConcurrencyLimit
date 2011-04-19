@@ -18,6 +18,10 @@ sub new {
     or croak("Need a 'max_procs' parameter");
   my $path = $opt->{path}
     or croak("Need a 'path' parameter");
+  my $lock_mode = lc($opt->{lock_mode} || 'exclusive');
+  if ($lock_mode !~ /^(?:exclusive|shared)$/) {
+    croak("Invalid lock mode '$lock_mode'");
+  }
 
   my $self = bless {
     max_procs => $max_procs,
@@ -25,6 +29,7 @@ sub new {
     lock_fh   => undef,
     lock_file => undef,
     id        => undef,
+    lock_mode => $lock_mode,
   } => $class;
 
   $self->_get_lock() or return undef;
@@ -36,6 +41,7 @@ sub _get_lock {
   my $self = shift;
 
   File::Path::mkpath($self->{path});
+  my $lock_mode_flag = $self->{lock_mode} eq 'shared' ? LOCK_SH : LOCK_EX;
 
   for my $worker (1 .. $self->{max_procs}) {
     my $lock_file = File::Spec->catfile($self->{path}, "$worker.lock");
@@ -43,7 +49,7 @@ sub _get_lock {
     sysopen(my $fh, $lock_file, O_RDWR|O_CREAT)
       or die "can't open '$lock_file': $!";
 
-    if (flock($fh, LOCK_EX|LOCK_NB)) {
+    if (flock($fh, $lock_mode_flag|LOCK_NB)) {
       $self->{lock_fh} = $fh;
       seek($fh,0,0);
       truncate($fh, 0);
@@ -61,10 +67,11 @@ sub _get_lock {
 sub lock_file { $_[0]->{lock_file} }
 sub path { $_[0]->{path} }
 
-# Normally needs implementing to release the lock,
-# but in this case, we just hold on to the file handle that's flocked.
-# Thus, it will be released as soon as this object is freed.
-#sub DESTROY {}
+sub DESTROY {
+  my $self = shift;
+  # should be superfluous
+  close($self->{lock_fh}) if $self->{lock_fh};
+}
 
 1;
 
@@ -111,6 +118,20 @@ It is suggested not to use a directory that may hold other data.
 
 The maximum no. of locks (and thus usually processes)
 to allow at one time.
+
+=back
+
+Other options:
+
+=over 2
+
+=item C<lock_mode>
+
+Defaults to C<exclusive> locks.
+
+In particular circumstance, you might want to set this to C<shared>.
+This subverts the way the normal concurrency limit works, but allows
+entirely different use cases.
 
 =back
 
