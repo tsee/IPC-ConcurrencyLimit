@@ -1,5 +1,8 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.02  Tue Mar 19 12:10 2011
+  - Expose shared-locking mode of operation.
+
 0.01  Wed Mar 16 14:29 2011
   - original version
 
