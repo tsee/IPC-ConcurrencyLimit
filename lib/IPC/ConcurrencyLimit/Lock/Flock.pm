@@ -51,13 +51,16 @@ sub _get_lock {
 
     if (flock($fh, $lock_mode_flag|LOCK_NB)) {
       $self->{lock_fh} = $fh;
-      seek($fh,0,0);
+      seek($fh, 0, 0);
       truncate($fh, 0);
       print $fh $$;
+      $fh->flush;
       $self->{id} = $worker;
       $self->{lock_file} = $lock_file;
       last;
     }
+
+    close $fh;
   }
 
   return undef if not $self->{id};
