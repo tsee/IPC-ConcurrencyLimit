@@ -1,5 +1,9 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.03  Thu May 26 13:08 2011
+  - Add missing flush to make sure PID is written to file.
+    (Should not be a critical fix)
+
 0.02  Tue Mar 19 12:10 2011
   - Expose shared-locking mode of operation.
 
