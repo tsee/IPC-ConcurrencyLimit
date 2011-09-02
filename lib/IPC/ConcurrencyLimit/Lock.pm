@@ -39,7 +39,7 @@ options including at least C<max_procs>
 which indicates the maximum number of locks
 at the same time.
 
-I<Note:> Copy the hash if you need to store it.
+I<Note to implementors:> Copy the hash if you need to store it.
 
 =head2 DESTROY
 
