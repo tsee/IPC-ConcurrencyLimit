@@ -1,5 +1,8 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.04  Fri Feb  3 19:55 2012
+  - Implement IPC::ConcurrencyLimit::WithStandby
+
 0.03  Thu May 26 13:08 2011
   - Add missing flush to make sure PID is written to file.
     (Should not be a critical fix)
