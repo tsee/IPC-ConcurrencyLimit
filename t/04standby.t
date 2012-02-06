@@ -1,10 +1,21 @@
 use strict;
 use warnings;
 use File::Temp;
-use Test::More tests => 4;
 use File::Path qw(mkpath);
 use File::Spec;
 use IPC::ConcurrencyLimit::WithStandby;
+
+use Test::More;
+BEGIN {
+  if ($^O !~ /linux/i && $^O !~ /win32/i && $^O =~ /darwin/i) {
+    Test::More->import(
+      skip_all => "Will test the fork-using tests only on linux, win32, darwin since I probably don't understand other OS well enough to fiddle this test to work"
+    );
+    exit(0);
+  }
+}
+
+use Test::More tests => 4;
 
 # TMPDIR will hopefully put it in the logical equivalent of
 # a /tmp. That is important because no sane admin will mount /tmp
