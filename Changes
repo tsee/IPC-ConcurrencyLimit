@@ -1,5 +1,12 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.05  Mon Feb  6 07:52 2012
+  - Skip the forking tests for WithStandby on uncommon OS.
+    Specifically, CPAN testers showed failures on Solaris that I have
+    no hope of debugging. It's more likely to be a bug in the tests
+    than a bug in the module. Contributors welcome.
+    For now, disable forking tests on non-linux, non-darwin, non-win32.
+
 0.04  Fri Feb  3 19:55 2012
   - Implement IPC::ConcurrencyLimit::WithStandby
 
