@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Carp qw(croak);
 
@@ -226,7 +226,7 @@ their gratitude.
 
 =head1 COPYRIGHT AND LICENSE
 
- (C) 2011 Steffen Mueller. All rights reserved.
+ (C) 2011, 2012 Steffen Mueller. All rights reserved.
  
  This code is available under the same license as Perl version
  5.8.1 or higher.
