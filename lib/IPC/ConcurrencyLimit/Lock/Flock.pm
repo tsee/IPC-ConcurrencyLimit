@@ -6,6 +6,7 @@ use Carp qw(croak);
 use File::Path qw();
 use File::Spec;
 use Fcntl qw(:DEFAULT :flock);
+use IO::File ();
 
 use IPC::ConcurrencyLimit::Lock;
 our @ISA = qw(IPC::ConcurrencyLimit::Lock);
