@@ -39,6 +39,7 @@ sub new {
     standby_lock => $standby_lock,
     retries => defined($params{retries}) ? $params{retries} : 10,
     interval => defined($params{interval}) ? $params{interval} : 1,
+    process_name_change => $params{process_name_change},
   } => $class);
 
   return $self;
@@ -55,6 +56,12 @@ sub get_lock {
   my $st_id = $st_lock->get_lock;
   return undef if not defined $st_id;
 
+  # got standby lock, go into wait-retry loop
+  my $old_proc_name;
+  if ($self->{process_name_change}) {
+    $old_proc_name = $0;
+    $0 = "$0 - standby";
+  }
   my $interval = $self->{interval};
   eval {
     my $tries = 0;
@@ -71,10 +78,12 @@ sub get_lock {
   }
   or do {
     my $err = $@ || 'Zombie error';
+    $0 = $old_proc_name if defined $old_proc_name;
     $st_lock->release_lock;
     die $err;
   };
 
+  $0 = $old_proc_name if defined $old_proc_name;
   return $id;
 }
 
@@ -155,6 +164,17 @@ to get the main lock. There will always be only one attempt to become
 a standby process. Additionally, C<interval> can indicate a number of seconds
 to wait between retries (also supports fractional seconds down to what
 C<Time::HiRes::sleep> supports).
+
+Finally, as a way to tell blocked worker processes apart from standby
+processes, the module supports the C<process_name_change> option. If set to
+true, then the module will modify the process name of standby processes via
+modification of <$0>. It appends the string " - standby" to $0 and resets it
+to the old value after timing out or getting a worker lock. This is only
+supported on newer Perls and might not work on all operating systems.
+On my testing Linux, a process that showed as C<perl foo.pl> in the process
+table before using this feature was shown as C<foo.pl - standby> while
+in standby mode and as C<foo.pl> after getting a main worker lock.
+Note the curiously stripped C<perl> prefix.
 
 =head1 AUTHOR
 
