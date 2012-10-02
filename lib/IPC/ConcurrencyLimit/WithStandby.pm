@@ -115,7 +115,7 @@ IPC::ConcurrencyLimit::WithStandby - IPC::ConcurrencyLimit with an additional st
   use IPC::ConcurrencyLimit::WithStandby;
   
   sub run {
-    my $limit = IPC::ConcurrencyLimit->new(
+    my $limit = IPC::ConcurrencyLimit::WithStandby->new(
       type              => 'Flock', # that's also the default
       max_procs         => 10,
       path              => '/var/run/myapp',
