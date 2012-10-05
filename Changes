@@ -1,5 +1,9 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.09  Fri Oct  5 12:08 2012
+  - IPC::ConcurrencyLimit::WithStandby now has dynamically
+    configurable retries via a callback mechanism.
+
 0.08  Tue Oct  2 09:47 2012
   - Fix IPC::ConcurrencyLimit::WithStandby synopsis.
 
