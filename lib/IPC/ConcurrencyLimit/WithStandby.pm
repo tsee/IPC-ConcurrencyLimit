@@ -173,9 +173,9 @@ C<Time::HiRes::sleep> supports).
 
 C<retries> can also be passed a code reference that will be called on every
 retry, with the current number of retries as its first argument. Returning true
-from this routine will break break the loop and grant the caller a lock. In its
-most simple form, it allows for an infinite number of retries by calling it
-this way:
+from this routine will break the loop and thus give up attempting to obtain
+the lock. In its most simple form, it allows for an infinite number of
+retries by calling it this way:
 
   my $limit = IPC::ConcurrencyLimit::WithStandby->new(
     retries           => sub {0},
@@ -186,7 +186,8 @@ this way:
   );
 
 The form above would be used to have a single process running, with a second
-one ready to take over 1/100th of a second after it exits.
+one ready to take over 1/100th of a second after it exits, at the expense of
+attempting to obtain a look 100 times per second.
 
 Finally, as a way to tell blocked worker processes apart from standby
 processes, the module supports the C<process_name_change> option. If set to
@@ -202,6 +203,8 @@ Note the curiously stripped C<perl> prefix.
 =head1 AUTHOR
 
 Steffen Mueller, C<smueller@cpan.org>
+
+David Morel, C<david.morel@amakuru.net>
 
 =head1 ACKNOWLEDGMENT
 
