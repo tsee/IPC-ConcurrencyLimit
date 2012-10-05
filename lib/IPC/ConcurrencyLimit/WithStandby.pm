@@ -119,7 +119,7 @@ IPC::ConcurrencyLimit::WithStandby - IPC::ConcurrencyLimit with an additional st
 =head1 SYNOPSIS
 
   use IPC::ConcurrencyLimit::WithStandby;
-
+  
   sub run {
     my $limit = IPC::ConcurrencyLimit::WithStandby->new(
       type              => 'Flock', # that's also the default
@@ -128,7 +128,7 @@ IPC::ConcurrencyLimit::WithStandby - IPC::ConcurrencyLimit with an additional st
       standby_path      => '/var/run/myapp/standby',
       standby_max_procs => 3,
     );
-
+    
     my $id = $limit->get_lock;
     if (not $id) {
       warn "Got none of the worker locks. Exiting.";
@@ -138,10 +138,10 @@ IPC::ConcurrencyLimit::WithStandby - IPC::ConcurrencyLimit with an additional st
       # Got one of the worker locks (ie. number $id)
       do_work();
     }
-
+    
     # lock released with $limit going out of scope here
   }
-
+  
   run();
   exit();
 
