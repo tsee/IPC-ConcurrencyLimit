@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 use Carp qw(croak);
 
@@ -57,6 +57,17 @@ sub lock_id {
   my $self = shift;
   return undef if not $self->{lock_obj};
   return $self->{lock_obj}->id;
+}
+
+sub heartbeat {
+  my $self = shift;
+  my $lock = $self->{lock_obj};
+  return if not $lock;
+  if (not $lock->heartbeat) {
+    $self->release_lock;
+    return();
+  }
+  return 1;
 }
 
 1;
@@ -210,6 +221,12 @@ Returns whether we have a lock.
 =head2 lock_id
 
 Returns the id of the lock or undef if there is none.
+
+=head2 heartbeat
+
+Check whether the lock is still valid. If so,
+returns true. Otherwise, it releases (destroys) the lock
+and returns false.
 
 =head1 AUTHOR
 

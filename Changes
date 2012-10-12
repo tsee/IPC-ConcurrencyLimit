@@ -1,5 +1,10 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.10  Fri Oct 12 17:00 2012
+  - The C<heartbeat> method of IPC::ConcurrencyLimit and
+    IPC::ConcurrencyLimit::Lock object can now be used to check
+    whether a lock was lost since it was first acquired.
+
 0.09  Fri Oct  5 12:08 2012
   - IPC::ConcurrencyLimit::WithStandby now has dynamically
     configurable retries via a callback mechanism.

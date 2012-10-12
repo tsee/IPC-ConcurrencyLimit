@@ -102,9 +102,15 @@ sub release_lock {
   my $self = shift;
   return $self->{main_lock}->release_lock(@_);
 }
+
 sub lock_id {
   my $self = shift;
   return $self->{main_lock}->lock_id(@_);
+}
+
+sub heartbeat {
+  my $self = shift;
+  return $self->{main_lock}->heartbeat;
 }
 
 1;

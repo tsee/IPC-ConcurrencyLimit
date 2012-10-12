@@ -5,6 +5,8 @@ use warnings;
 
 sub id { $_[0]->{id} }
 
+sub heartbeat { 1 }
+
 1;
 
 __END__
@@ -49,6 +51,12 @@ needs to release the lock.
 =head2 id
 
 Returns the id of the lock (starting at 1, not 0).
+
+=head2 heartbeat
+
+When called, must return whether the lock is still valid.
+By default, this just returns true unless overridden in
+subclasses.
 
 =head1 AUTHOR
 
