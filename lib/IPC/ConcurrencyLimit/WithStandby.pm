@@ -178,13 +178,13 @@ to wait between retries (also supports fractional seconds down to what
 C<Time::HiRes::sleep> supports).
 
 C<retries> can also be passed a code reference that will be called on every
-retry, with the current number of retries as its first argument. Returning true
+retry, with the current number of retries as its first argument. Returning false
 from this routine will break the loop and thus give up attempting to obtain
 the lock. In its most simple form, it allows for an infinite number of
 retries by calling it this way:
 
   my $limit = IPC::ConcurrencyLimit::WithStandby->new(
-    retries           => sub {0},
+    retries           => sub {1},
     interval          => 0.01,
     maxproc           => 1,
     standby_max_procs => 1,
