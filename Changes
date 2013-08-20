@@ -1,5 +1,8 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.11  Tue Aug 20 21:42 2013
+  - Fix incorrect documentation for retries parameter
+
 0.10  Fri Oct 12 17:00 2012
   - The C<heartbeat> method of IPC::ConcurrencyLimit and
     IPC::ConcurrencyLimit::Lock object can now be used to check
