@@ -178,22 +178,22 @@ to wait between retries (also supports fractional seconds down to what
 C<Time::HiRes::sleep> supports).
 
 C<retries> can also be passed a code reference that will be called on every
-retry, with the current number of retries as its first argument. Returning false
-from this routine will break the loop and thus give up attempting to obtain
-the lock. In its most simple form, it allows for an infinite number of
-retries by calling it this way:
+retry, with the current attempt number as its first argument (starting at 1).
+Returning false from this routine will break the loop and give up any further
+attempts to acquire the lock. One example of a configuration which would
+continue to attempt to acquire a lock forever would be as follows:
 
   my $limit = IPC::ConcurrencyLimit::WithStandby->new(
-    retries           => sub {1},
+    retries           => sub { $_[0] },
     interval          => 0.01,
     maxproc           => 1,
     standby_max_procs => 1,
     ...
   );
 
-The form above would be used to have a single process running, with a second
-one ready to take over 1/100th of a second after it exits, at the expense of
-attempting to obtain a look 100 times per second.
+The form above would be used to have a single process running, with a standby
+process ready to take over 1/100th of a second after the active process exits,
+at the expense of attempting to acquire a C<flock()> 100 times per second.
 
 Finally, as a way to tell blocked worker processes apart from standby
 processes, the module supports the C<process_name_change> option. If set to
