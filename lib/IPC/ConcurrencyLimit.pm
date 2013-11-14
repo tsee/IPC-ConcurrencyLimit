@@ -234,16 +234,20 @@ Steffen Mueller, C<smueller@cpan.org>
 
 Yves Orton
 
+David Morel
+
+Matt Koscica
+
 =head1 ACKNOWLEDGMENT
 
-This module was originally developed for booking.com.
-With approval from booking.com, this module was generalized
+This module was originally developed for Booking.com.
+With approval from Booking.com, this module was generalized
 and put on CPAN, for which the authors would like to express
 their gratitude.
 
 =head1 COPYRIGHT AND LICENSE
 
- (C) 2011, 2012 Steffen Mueller. All rights reserved.
+ (C) 2011, 2012, 2013 Steffen Mueller. All rights reserved.
  
  This code is available under the same license as Perl version
  5.8.1 or higher.
