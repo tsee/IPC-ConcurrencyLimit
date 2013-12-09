@@ -71,15 +71,16 @@ sub get_lock {
   my $interval = $self->{interval};
   eval {
     my $tries = 0;
-    do {{
+    while (1) {
       $id = $main_lock->get_lock;
       if (defined $id) {
         $st_lock->release_lock;
         last;
       }
-      ++$tries;
+
+      last unless $self->{retries}->(++$tries);
       sleep($interval) if $interval;
-    }} while (not defined($id) and $self->{retries}->($tries));
+    }
     1;
   }
   or do {
