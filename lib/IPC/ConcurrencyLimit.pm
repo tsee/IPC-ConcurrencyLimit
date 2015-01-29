@@ -209,6 +209,11 @@ Returns undef if locking was unsuccessful.
 Multiple calls do not stack. They will simply return
 the same lock id as long as a lock is held.
 
+B<WARNING!> make sure the variable holding the lock remains in scope at all
+times, otherwise the lock will be released and locking will become apparently
+ineffective. This is the most common reason for having several concurrent
+processes running when only one is expected to be alive.
+
 =head2 release_lock
 
 Releases the lock. Returns 1 if a lock has been
