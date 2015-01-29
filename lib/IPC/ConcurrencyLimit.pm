@@ -90,6 +90,7 @@ IPC::ConcurrencyLimit - Lock-based limits on cooperative multi-processing
       path      => '/var/run/myapp', # an option to the locking strategy
     );
     
+    # NOTE: when $limit goes out of scope, the lock is released
     my $id = $limit->get_lock;
     if (not $id) {
       warn "Got none of the worker locks. Exiting.";
@@ -236,7 +237,9 @@ Yves Orton
 
 David Morel
 
-Matt Koscica
+Matt Koscica, C<mattk@cpan.org>
+
+Ivan Kruglov
 
 =head1 ACKNOWLEDGMENT
 
@@ -247,7 +250,7 @@ their gratitude.
 
 =head1 COPYRIGHT AND LICENSE
 
- (C) 2011, 2012, 2013 Steffen Mueller. All rights reserved.
+ (C) 2011-2015 Steffen Mueller. All rights reserved.
  
  This code is available under the same license as Perl version
  5.8.1 or higher.
