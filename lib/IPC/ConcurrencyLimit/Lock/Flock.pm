@@ -23,6 +23,10 @@ sub new {
   if ($lock_mode !~ /^(?:exclusive|shared)$/) {
     croak("Invalid lock mode '$lock_mode'");
   }
+  my $file_prefix= $opt->{file_prefix} // "";
+  $file_prefix .= "." if length $file_prefix;
+  my $file_ext= $opt->{file_ext} // "lock";
+  $file_ext=~s/^\.?/./;
 
   my $self = bless {
     max_procs => $max_procs,
@@ -30,6 +34,8 @@ sub new {
     lock_fh   => undef,
     lock_file => undef,
     id        => undef,
+    file_prefix => $file_prefix,
+    file_ext    => $file_ext,
     lock_mode => $lock_mode,
   } => $class;
 
@@ -44,8 +50,11 @@ sub _get_lock {
   File::Path::mkpath($self->{path});
   my $lock_mode_flag = $self->{lock_mode} eq 'shared' ? LOCK_SH : LOCK_EX;
 
-  for my $worker (1 .. $self->{max_procs}) {
-    my $lock_file = File::Spec->catfile($self->{path}, "$worker.lock");
+  # We try in reverse order, so that if a processor is started with
+  # a higher number of allowed locks there is less chance that it starves
+  # a processor with a lower number of allowed locks.
+  for my $worker_id (reverse 1 .. $self->{max_procs}) {
+    my $lock_file = File::Spec->catfile($self->{path}, join("", $self->{file_prefix}, $worker_id, $self->{file_ext}));
 
     sysopen(my $fh, $lock_file, O_RDWR|O_CREAT)
       or die "can't open '$lock_file': $!";
@@ -56,7 +65,7 @@ sub _get_lock {
       truncate($fh, 0);
       print $fh $$;
       $fh->flush;
-      $self->{id} = $worker;
+      $self->{id} = $worker_id;
       $self->{lock_file} = $lock_file;
       last;
     }
@@ -116,7 +125,20 @@ Required options:
 
 The directory that will hold the lock files.
 Created if it does not exist.
-It is suggested not to use a directory that may hold other data.
+It is suggested not to use a directory that may hold other data unless you also
+use the file_prefix option and ensure that your locks are unique.
+
+=item C<file_prefix>
+
+An optional prefix which will be prepended to lock file names. If specified then
+files will be created that look like this:
+
+    $path/$file_prefix.1.lock
+
+=item C<file_ext>
+
+By default lock files have a ".lock" suffix/extension. Set this option to specify
+a different extension.
 
 =item C<max_procs>
 

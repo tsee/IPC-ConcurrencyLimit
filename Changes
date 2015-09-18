@@ -1,5 +1,12 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.13  2015-09-18
+  - Flock:
+    - start at the *highest* id, and count *down*
+      to find the lock we want to use.
+    - add file_prefix option
+    - add file_ext option
+
 0.12  Thu Jan 29 15:20 2015
   - Use `retries` callback earlier
 
