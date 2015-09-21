@@ -1,6 +1,6 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
-0.13  2015-09-18
+0.13  Fri Sep 18 15:04 2015
   - added warning in the POD about lock variable scope
   - Flock:
     - start at the *highest* id, and count *down*
