@@ -52,7 +52,7 @@ sub get_lock {
   # Convert retries to a sub if it's not one already
   if ( ref $self->{retries} ne "CODE" ) {
       my $max_retries = $self->{retries};
-      $self->{retries} = sub { return $_[0] != $max_retries + 1 };
+      $self->{retries} = sub { return $_[0] <= $max_retries };
   }
 
   my $id = $main_lock->get_lock;
