@@ -136,6 +136,7 @@ IPC::ConcurrencyLimit::WithStandby - IPC::ConcurrencyLimit with an additional st
       standby_max_procs => 3,
     );
     
+    # NOTE: when $limit goes out of scope, the lock is released
     my $id = $limit->get_lock;
     if (not $id) {
       warn "Got none of the worker locks. Exiting.";
@@ -206,6 +207,13 @@ On my testing Linux, a process that showed as C<perl foo.pl> in the process
 table before using this feature was shown as C<foo.pl - standby> while
 in standby mode and as C<foo.pl> after getting a main worker lock.
 Note the curiously stripped C<perl> prefix.
+
+=head1 WARNING!
+
+Make sure the variable holding the lock remains in scope at all times,
+otherwise the lock will be released, resulting in process churn and potential
+double work. This is the most common reason for having several concurrent
+processes running when only one is expected to be alive.
 
 =head1 AUTHOR
 
