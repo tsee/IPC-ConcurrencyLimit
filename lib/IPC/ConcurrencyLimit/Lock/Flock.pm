@@ -23,9 +23,9 @@ sub new {
   if ($lock_mode !~ /^(?:exclusive|shared)$/) {
     croak("Invalid lock mode '$lock_mode'");
   }
-  my $file_prefix= $opt->{file_prefix} // "";
+  my $file_prefix= defined $opt->{file_prefix} ? $opt->{file_prefix} : "";
   $file_prefix .= "." if length $file_prefix;
-  my $file_ext= $opt->{file_ext} // "lock";
+  my $file_ext= defined $opt->{file_ext} ? $opt->{file_ext} : "lock";
   $file_ext=~s/^\.?/./;
 
   my $self = bless {
