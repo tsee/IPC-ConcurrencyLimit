@@ -1,5 +1,13 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.15  Wed Aug 24 14:16 2016
+  - add new WithLatestStandby backend (YVES)
+  - bugfix related to retry count (YVES)
+
+0.14  Tue Sep 22 10:01 2015
+  - No-op release to fix META.json+META.yml+Changes
+    (https://rt.cpan.org/Public/Bug/Display.html?id=107204)
+
 0.13  Fri Sep 18 15:04 2015
   - added warning in the POD about lock variable scope
   - Flock:

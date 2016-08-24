@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 use Carp qw(croak);
 use Time::HiRes qw(sleep);
 use IPC::ConcurrencyLimit;

@@ -8,7 +8,7 @@ use File::Spec;
 use Fcntl qw(:DEFAULT :flock);
 use IO::File ();
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 use IPC::ConcurrencyLimit::Lock;
 our @ISA = qw(IPC::ConcurrencyLimit::Lock);
 
