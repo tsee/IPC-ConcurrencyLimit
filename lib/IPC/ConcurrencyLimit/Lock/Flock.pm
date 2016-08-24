@@ -54,7 +54,8 @@ sub _get_lock {
   # We try in reverse order, so that if a processor is started with
   # a higher number of allowed locks there is less chance that it starves
   # a processor with a lower number of allowed locks.
-  for my $worker_id (reverse 1 .. $self->{max_procs}) {
+  my $worker_id = $self->{max_procs};
+  while ($worker_id > 0) {
     my $lock_file = File::Spec->catfile($self->{path}, join("", $self->{file_prefix}, $worker_id, $self->{file_ext}));
 
     sysopen(my $fh, $lock_file, O_RDWR|O_CREAT)
@@ -72,6 +73,7 @@ sub _get_lock {
     }
 
     close $fh;
+    $worker_id--;
   }
 
   return undef if not $self->{id};
