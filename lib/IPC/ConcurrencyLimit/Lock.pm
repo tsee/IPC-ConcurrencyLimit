@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 sub id { $_[0]->{id} }
 
 sub heartbeat { 1 }

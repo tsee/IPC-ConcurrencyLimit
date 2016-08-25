@@ -1,5 +1,10 @@
 Revision history for Perl extension IPC::ConcurrencyLimit
 
+0.16 Thu Aug 25 16:29:09 CEST 2016
+  - default process_name_change in WithLatestStandby to off.
+  - use constant memory instead of scaling to max_procs
+    during execution in IPC::ConcurrencyLimit::Flock.
+
 0.15  Wed Aug 24 14:16 2016
   - add new WithLatestStandby backend (YVES)
   - bugfix related to retry count (YVES)
