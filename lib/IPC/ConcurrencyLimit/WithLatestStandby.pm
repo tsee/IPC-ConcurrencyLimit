@@ -22,7 +22,7 @@ sub new {
     }
 
     my $process_name_change= $params{process_name_change} || 0;
-    my $path=        $params{path}          || die "lock_root is mandatory";
+    my $path=        $params{path}          || die __PACKAGE__ . '->new: missing mandatory parameter `path`';
     my $file_prefix= $params{file_prefix}   || "";
     my $poll_time=   $params{poll_time}     || $params{interval} || 1; # seconds to poll (may be fraction)
     my $retries=     $params{retries}       || undef;
