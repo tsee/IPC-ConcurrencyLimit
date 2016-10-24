@@ -321,7 +321,7 @@ before exiting. This option may be combined with a non-reference C<retries> valu
 See also C<retries> for more details about finer grained control of the
 lock wait loop.
 
-=item lock_root
+=item path
 
 Specify the directory for Flock.
 
