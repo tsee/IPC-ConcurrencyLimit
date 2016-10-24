@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Carp qw(croak);
 use Time::HiRes qw(sleep time);
@@ -21,8 +21,8 @@ sub new {
         croak( __PACKAGE__ . " does not support max_procs!=1, use multiple objects instead.");
     }
 
-    my $process_name_change= $params{process_name_change} // 1;
-    my $path=        $params{path}          || die "lock_root is mandatory";
+    my $process_name_change= $params{process_name_change} || 0;
+    my $path=        $params{path}          || die __PACKAGE__ . '->new: missing mandatory parameter `path`';
     my $file_prefix= $params{file_prefix}   || "";
     my $poll_time=   $params{poll_time}     || $params{interval} || 1; # seconds to poll (may be fraction)
     my $retries=     $params{retries}       || undef;
@@ -341,13 +341,13 @@ containing text to output.
 
 =item process_name_change
 
-Use this to tell the difference between active and standby workers in
-a process list. When this option is not disabled (it defaults to enabled)
-the C<$0> for the running process isupdated to include the lock name
-that is currently held. This way you can see what state the worker is
-in by inspecting the process list using a tool like C<top> or C<ps auwx>.
+Use this to tell the difference between active and standby workers in a process
+list. When this option is not disabled the C<$0> for the running process is
+updated to include the lock name that is currently held. This way you can see
+what state the worker is in by inspecting the process list using a tool like
+C<top> or C<ps auwx>.
 
-When this option is not disabled C<IPC::ConcurrencyLimit::WithLatestStandby>
+When this option is enabled C<IPC::ConcurrencyLimit::WithLatestStandby>
 will modify the running processes name via modification of C<$0> to show the
 state of the lock process and which lock is held if any.
 This is only supported on newer Perls and might not work on all
@@ -361,8 +361,9 @@ C<IPC::ConcurrencyLimite::WithStandby> as it will NOT normally restore the
 previous value of $0 after exiting C<get_lock()>. If you want that
 behavior set C<process_name_change> to a value larger than 1.
 
-This parameter defaults to on or "enabled", you should explicitly set it
-to 0 if you wish to disable it.
+Due to an oversight this parameter defaults to on or "enabled" in
+v0.15, and in later versions defaults to off or "disabled", you should
+explicitly set it if you wish to be sure of what will happen.
 
 =back
 
