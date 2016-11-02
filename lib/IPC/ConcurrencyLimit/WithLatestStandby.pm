@@ -3,7 +3,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 use Carp qw(croak);
 use Time::HiRes qw(sleep time);
@@ -94,7 +94,8 @@ sub get_lock {
     # the rate we allocate new workers.
     my $locker_id= $#$locker;
     if ( $locker->[$locker_id]->get_lock() ) {
-        $self->_diag( "Got a $names->[$locker_id] lock");
+        $self->_diag( "Got a $names->[$locker_id] lock")
+            if $self->{debug};
     } else {
         $self->_diag( "Failed to get a $names->[$locker_id] lock, entry lock is held by another process" )
             if $self->{debug};
@@ -121,7 +122,8 @@ sub get_lock {
 
         # can we shuffle our lock left?
         if ( $locker->[$locker_id - 1]->get_lock() ) {
-            $self->_diag( "Got a $names->[$locker_id -1] lock, dropping old $names->[$locker_id] lock");
+            $self->_diag( "Got a $names->[$locker_id -1] lock, dropping old $names->[$locker_id] lock")
+                if $self->{debug};
             # yep, we got the lock to the left, so drop our old lock,
             # and move the pointer left at the same time.
             $locker->[ $locker_id-- ]->release_lock();
